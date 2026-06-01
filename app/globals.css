@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #0a0a0f;
+  --color-foreground: #f0ece4;
+  --color-surface: #141420;
+  --color-surface-light: #1e1e30;
+  --color-accent: #c9a86c;
+  --color-accent-light: #e0c992;
+  --color-neon-purple: #a855f7;
+  --color-neon-pink: #ec4899;
+  --color-neon-amber: #f59e0b;
+  --color-muted: #6b7280;
+  --color-border: #2a2a3e;
+  --color-glass: rgba(20, 20, 32, 0.6);
+  --color-glass-border: rgba(201, 168, 108, 0.15);
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 3px;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Glass card utility */
+.glass-card {
+  background: var(--color-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+}
+
+.glass-card-sm {
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+}
+
+/* Neon glow effects */
+.neon-glow {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 60px rgba(168, 85, 247, 0.1);
+}
+
+.neon-glow-amber {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3), 0 0 60px rgba(245, 158, 11, 0.1);
+}
+
+.gold-glow {
+  box-shadow: 0 0 20px rgba(201, 168, 108, 0.4), 0 0 60px rgba(201, 168, 108, 0.15);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 50%, var(--color-neon-amber) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-purple {
+  background: linear-gradient(135deg, var(--color-neon-purple) 0%, var(--color-neon-pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient border */
+.animated-border {
+  position: relative;
+  overflow: hidden;
+}
+.animated-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--color-accent), var(--color-neon-purple), var(--color-neon-pink), var(--color-accent));
+  background-size: 400% 400%;
+  animation: borderGlow 6s ease infinite;
+  z-index: -1;
+  border-radius: inherit;
+}
+.animated-border::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: var(--color-surface);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+@keyframes borderGlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Pulse animation for CTAs */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201, 168, 108, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(201, 168, 108, 0.7), 0 0 80px rgba(201, 168, 108, 0.3); }
+}
+
+.pulse-cta {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(201, 168, 108, 0.1) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Star rating */
+.star-filled {
+  color: #f59e0b;
+}
+
+/* Body map hover zones */
+.body-zone {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.body-zone:hover {
+  filter: brightness(1.3);
+  transform: scale(1.02);
+}
+
+/* Step indicator */
+.step-active {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-neon-amber) 100%);
+  color: var(--color-background);
+}
+
+.step-completed {
+  background: var(--color-accent);
+  color: var(--color-background);
+}
+
+.step-pending {
+  background: var(--color-surface-light);
+  color: var(--color-muted);
+}
