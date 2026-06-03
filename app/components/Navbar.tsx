@@ -10,6 +10,7 @@ export default function Navbar() {
   const navLinks = [
     { href: '/', label: 'Ana Sayfa' },
     { href: '/ilk-defa', label: 'İlk Defa' },
+    { href: '/hediye-karti', label: 'Hediye Kartı' },
   ];
 
   return (

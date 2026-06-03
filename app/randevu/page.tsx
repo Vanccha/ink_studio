@@ -5,14 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PainMap from '../components/PainMap';
+import GuestCounter from '../components/GuestCounter';
+import UpsellSection from '../components/UpsellSection';
 import { useStudioStore, STYLE_PRICES, SIZE_MULTIPLIERS, BODY_PARTS } from '../store';
 
 const STEPS = [
   { num: 1, label: 'Boyut & Stil' },
   { num: 2, label: 'Fiyat' },
-  { num: 3, label: 'Bölge Seçimi' },
-  { num: 4, label: 'Kapora' },
-  { num: 5, label: 'Tamamlandı' },
+  { num: 3, label: 'Bölge & Tarih' },
+  { num: 4, label: 'Bilgileriniz' },
+  { num: 5, label: 'Kapora' },
+  { num: 6, label: 'Tamamlandı' },
 ];
 
 function StepIndicator({ current }: { current: number }) {
@@ -49,6 +52,11 @@ export default function RandevuPage() {
 
   const canGoToStep2 = store.selectedStyle !== '' && store.selectedSize !== '';
   const canGoToStep3 = store.estimatedPrice !== null;
+  const canGoToStep5 = store.guestFirstName.trim() !== '' && store.guestLastName.trim() !== '' && store.guestPhone.trim() !== '' && store.guestEmail.trim() !== '';
+
+  // Account activation state
+  const [activationPassword, setActivationPassword] = useState('');
+  const [accountActivated, setAccountActivated] = useState(false);
   const canGoToStep4 = store.selectedBodyPart !== '' && store.selectedDate !== '' && store.selectedTime !== '';
 
   const handleBodyPartSelect = (partId: string) => {
@@ -113,6 +121,9 @@ export default function RandevuPage() {
                 exit={{ opacity: 0, x: -30 }}
                 className="space-y-8"
               >
+                {/* Guest Counter */}
+                <GuestCounter />
+
                 {/* Style Selection */}
                 <div className="glass-card p-6 md:p-8">
                   <h2 className="text-xl font-bold text-[var(--color-foreground)] mb-6">
@@ -232,8 +243,10 @@ export default function RandevuPage() {
                       <div className="text-4xl md:text-5xl font-bold gradient-text">
                         {store.estimatedPrice.min.toLocaleString('tr-TR')} ₺ — {store.estimatedPrice.max.toLocaleString('tr-TR')} ₺
                       </div>
-                      <p className="text-xs text-[var(--color-muted)] mt-3 max-w-md mx-auto">
+                      <p className="text-xs text-[var(--color-muted)] mt-3 max-w-md mx-auto leading-relaxed">
                         Hesaplama: {STYLE_PRICES[store.selectedStyle]?.toLocaleString('tr-TR')} ₺ (baz fiyat) × {SIZE_MULTIPLIERS[store.selectedSize]?.multiplier} (boyut çarpanı)
+                        {store.guestCount > 1 ? ` × ${store.guestCount} (Kişi)` : ''}
+                        {store.isCouplesTattoo ? ` - %10 (Çift İndirimi)` : ''}
                       </p>
                     </motion.div>
                   )}
@@ -521,10 +534,111 @@ export default function RandevuPage() {
               </motion.div>
             )}
 
-            {/* ===== STEP 4: Deposit Payment ===== */}
+            {/* ===== STEP 4: Guest Checkout — Contact Info ===== */}
             {store.currentStep === 4 && (
               <motion.div
                 key="step4"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                className="space-y-6"
+              >
+                <div className="glass-card p-6 md:p-8">
+                  <h2 className="text-xl font-bold text-[var(--color-foreground)] mb-2">
+                    İletişim Bilgileriniz
+                  </h2>
+                  <p className="text-sm text-[var(--color-muted)] mb-6">
+                    Randevunuz için iletişim bilgilerinizi girin. Hesap oluşturma zorunlu değildir.
+                  </p>
+
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-xs text-[var(--color-muted)] uppercase tracking-wider block mb-2">Ad *</label>
+                        <input
+                          type="text"
+                          value={store.guestFirstName}
+                          onChange={(e) => store.setGuestField('guestFirstName', e.target.value)}
+                          placeholder="Adınız"
+                          className="w-full bg-[var(--color-surface-light)] rounded-xl px-4 py-3 text-[var(--color-foreground)] text-sm border border-[var(--color-border)] focus:border-[var(--color-accent)] focus:outline-none transition-colors placeholder:text-[var(--color-muted)]/40"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[var(--color-muted)] uppercase tracking-wider block mb-2">Soyad *</label>
+                        <input
+                          type="text"
+                          value={store.guestLastName}
+                          onChange={(e) => store.setGuestField('guestLastName', e.target.value)}
+                          placeholder="Soyadınız"
+                          className="w-full bg-[var(--color-surface-light)] rounded-xl px-4 py-3 text-[var(--color-foreground)] text-sm border border-[var(--color-border)] focus:border-[var(--color-accent)] focus:outline-none transition-colors placeholder:text-[var(--color-muted)]/40"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs text-[var(--color-muted)] uppercase tracking-wider block mb-2">Telefon *</label>
+                      <input
+                        type="tel"
+                        value={store.guestPhone}
+                        onChange={(e) => store.setGuestField('guestPhone', e.target.value)}
+                        placeholder="05XX XXX XX XX"
+                        className="w-full bg-[var(--color-surface-light)] rounded-xl px-4 py-3 text-[var(--color-foreground)] text-sm border border-[var(--color-border)] focus:border-[var(--color-accent)] focus:outline-none transition-colors placeholder:text-[var(--color-muted)]/40"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-[var(--color-muted)] uppercase tracking-wider block mb-2">E-posta *</label>
+                      <input
+                        type="email"
+                        value={store.guestEmail}
+                        onChange={(e) => store.setGuestField('guestEmail', e.target.value)}
+                        placeholder="ornek@email.com"
+                        className="w-full bg-[var(--color-surface-light)] rounded-xl px-4 py-3 text-[var(--color-foreground)] text-sm border border-[var(--color-border)] focus:border-[var(--color-accent)] focus:outline-none transition-colors placeholder:text-[var(--color-muted)]/40"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Privacy note */}
+                  <div className="mt-6 bg-[var(--color-neon-purple)]/10 border border-[var(--color-neon-purple)]/20 rounded-xl p-4 flex items-start gap-3">
+                    <span className="text-lg flex-shrink-0">🛡️</span>
+                    <p className="text-xs text-[var(--color-muted)]">
+                      Bilgileriniz yalnızca randevu iletişimi için kullanılacaktır. Üçüncü taraflarla paylaşılmaz.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Navigation */}
+                <div className="flex justify-between">
+                  <button
+                    onClick={() => store.setCurrentStep(3)}
+                    className="px-6 py-3 rounded-xl text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
+                  >
+                    ← Geri
+                  </button>
+                  <motion.button
+                    whileHover={canGoToStep5 ? { scale: 1.05 } : {}}
+                    whileTap={canGoToStep5 ? { scale: 0.95 } : {}}
+                    onClick={() => {
+                      if (canGoToStep5) {
+                        store.createShadowAccount();
+                        store.setCurrentStep(5);
+                      }
+                    }}
+                    disabled={!canGoToStep5}
+                    className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                      canGoToStep5
+                        ? 'bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-neon-amber)] text-[var(--color-background)] hover:shadow-lg hover:shadow-[var(--color-accent)]/25'
+                        : 'bg-[var(--color-surface-light)] text-[var(--color-muted)] cursor-not-allowed'
+                    }`}
+                  >
+                    Devam Et →
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* ===== STEP 5: Deposit Payment ===== */}
+            {store.currentStep === 5 && (
+              <motion.div
+                key="step5"
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
@@ -535,9 +649,16 @@ export default function RandevuPage() {
                     Kapora Ödemesi
                   </h2>
 
+                  {/* Upsell Opportunity */}
+                  <UpsellSection />
+
                   {/* Booking Summary */}
                   <div className="bg-[var(--color-surface-light)]/50 rounded-xl p-5 mb-6 space-y-3">
                     <h3 className="text-sm font-semibold text-[var(--color-accent)] uppercase tracking-wider mb-3">Randevu Özeti</h3>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-[var(--color-muted)]">Müşteri</span>
+                      <span className="text-[var(--color-foreground)] font-medium">{store.guestFirstName} {store.guestLastName}</span>
+                    </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-[var(--color-muted)]">Stil</span>
                       <span className="text-[var(--color-foreground)] font-medium">{store.selectedStyle}</span>
@@ -568,11 +689,40 @@ export default function RandevuPage() {
                     </div>
                     <div className="border-t border-[var(--color-border)] pt-3 mt-3">
                       <div className="flex justify-between text-sm">
-                        <span className="text-[var(--color-muted)]">Tahmini Fiyat</span>
+                        <span className="text-[var(--color-muted)]">Tahmini Dövme Fiyatı</span>
                         <span className="text-[var(--color-foreground)] font-bold">
                           {store.estimatedPrice?.min.toLocaleString('tr-TR')} - {store.estimatedPrice?.max.toLocaleString('tr-TR')} ₺
                         </span>
                       </div>
+                      
+                      {store.addOns.length > 0 && (
+                        <>
+                          <div className="flex justify-between text-sm mt-2">
+                            <span className="text-[var(--color-muted)]">Ekstralar</span>
+                            <span className="text-[var(--color-neon-pink)] font-bold">
+                              + {store.addOns.reduce((sum, a) => sum + ((a.discountedPrice || a.price) * a.quantity), 0).toLocaleString('tr-TR')} ₺
+                            </span>
+                          </div>
+                          {store.addOns.map(a => (
+                            <div key={a.id} className="flex justify-between text-xs mt-1 pl-2">
+                              <span className="text-[var(--color-muted)]">└ {a.name} (x{a.quantity})</span>
+                              <span className="text-[var(--color-muted)]">{((a.discountedPrice || a.price) * a.quantity).toLocaleString('tr-TR')} ₺</span>
+                            </div>
+                          ))}
+                        </>
+                      )}
+
+                      {/* Loyalty Discount Display */}
+                      {store.userProfile && store.userProfile.loyaltyTier !== 'bronze' && (
+                        <div className="flex justify-between text-sm mt-2 pt-2 border-t border-[var(--color-border)]">
+                          <span className="text-[var(--color-muted)]">
+                            Sadakat ({store.userProfile.loyaltyTier === 'gold' ? 'Gold Üye - %15 İndirim' : 'Silver Üye - Ücretsiz Bakım'})
+                          </span>
+                          <span className="text-green-400 font-bold">
+                            {store.userProfile.loyaltyTier === 'gold' ? '-%15' : 'Hediye'}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -625,7 +775,7 @@ export default function RandevuPage() {
                 {/* Back */}
                 <div className="flex justify-start">
                   <button
-                    onClick={() => store.setCurrentStep(3)}
+                    onClick={() => store.setCurrentStep(4)}
                     className="px-6 py-3 rounded-xl text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
                   >
                     ← Geri
@@ -634,8 +784,8 @@ export default function RandevuPage() {
               </motion.div>
             )}
 
-            {/* ===== STEP 5: Confirmation & WhatsApp Handoff ===== */}
-            {store.currentStep === 5 && (
+            {/* ===== STEP 6: Confirmation & Account Activation ===== */}
+            {store.currentStep === 6 && (
               <motion.div
                 key="step5"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -739,11 +889,60 @@ export default function RandevuPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.9 }}
-                    className="text-xs text-[var(--color-muted)] mt-4"
+                    className="text-xs text-[var(--color-muted)] mt-4 mb-8"
                   >
                     Referans görselinizi ve ilham kaynaklarınızı WhatsApp üzerinden paylaşarak
                     sanatçımızın hazırlık yapmasını sağlayın.
                   </motion.p>
+
+                  {/* Account Activation Section */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1 }}
+                    className="border-t border-[var(--color-border)] pt-8 mt-8"
+                  >
+                    {!accountActivated ? (
+                      <div className="bg-[var(--color-surface-light)]/50 rounded-xl p-6 max-w-md mx-auto text-left">
+                        <h3 className="text-lg font-bold text-[var(--color-foreground)] mb-2">
+                          Sadakat Puanı Kazan! 🎁
+                        </h3>
+                        <p className="text-sm text-[var(--color-muted)] mb-4">
+                          Randevunuz onaylandı! Sadakat puanlarınızı takip etmek ve indirim kazanmak için hemen bir şifre belirleyin. Hesabınız saniyeler içinde aktifleşir.
+                        </p>
+                        <div className="flex gap-2">
+                          <input
+                            type="password"
+                            value={activationPassword}
+                            onChange={(e) => setActivationPassword(e.target.value)}
+                            placeholder="Şifrenizi belirleyin (en az 6 hane)"
+                            className="flex-1 bg-[var(--color-background)] rounded-xl px-4 py-3 text-[var(--color-foreground)] text-sm border border-[var(--color-border)] focus:border-[var(--color-accent)] focus:outline-none transition-colors"
+                          />
+                          <button
+                            onClick={() => {
+                              if (activationPassword.length >= 6) {
+                                store.activateAccount(activationPassword);
+                                setAccountActivated(true);
+                              } else {
+                                alert('Şifre en az 6 karakter olmalıdır.');
+                              }
+                            }}
+                            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-neon-amber)] text-[var(--color-background)] font-bold text-sm hover:shadow-lg transition-all"
+                          >
+                            Kaydet
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6 max-w-md mx-auto text-center">
+                        <span className="text-3xl mb-3 block">🎉</span>
+                        <h3 className="text-lg font-bold text-green-400 mb-1">Hesabınız Aktif!</h3>
+                        <p className="text-sm text-[var(--color-muted)]">
+                          Hoş geldin, {store.guestFirstName}! Artık indirimlerden ve kampanyalardan yararlanabilirsin.
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
                 </div>
               </motion.div>
             )}
