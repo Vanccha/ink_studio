@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 INK STUDIO - Modern Dövme Stüdyosu Yönetim Sistemi
 
-## Getting Started
+Bu proje, bir dövme stüdyosunun randevu, CRM, sadakat (loyalty) ve hediye kartı süreçlerini uçtan uca yönetebilen, tamamen modern frontend teknolojileriyle (Next.js, Zustand, TailwindCSS, Framer Motion) inşa edilmiş eğitim seviyesinde bir prototiptir.
 
-First, run the development server:
+Projenin temel amacı; karmaşık iş mantıklarını (business logic) backend'e ihtiyaç duymadan **Zustand Store** üzerinde simüle ederek modern bir mimarinin (Vibecoding) nasıl tasarlanacağını göstermektir.
+
+---
+
+## 🚀 Kullanılan Teknolojiler
+
+*   **Framework:** Next.js (App Router, Turbopack)
+*   **Stil (Aesthetic):** TailwindCSS + CSS Değişkenleri (Glassmorphism, Neon efektleri, Dark Mode)
+*   **Animasyonlar:** Framer Motion (Mikro animasyonlar, sayfa geçişleri, dinamik step indikasyonları)
+*   **State Yönetimi:** Zustand (Store mantığı, Persist middleware ile tarayıcı bazlı DB simülasyonu)
+*   **İkonlar & Fontlar:** Inter/Outfit (Sleek Typography)
+
+---
+
+## 🛠️ Temel Modüller ve Mimari Açıklamalar
+
+### 1. Dinamik Randevu Akışı (Multi-Step Booking Engine)
+Randevu sistemi `/randevu` rotasında 6 adımlı (Step) bir wizard (sihirbaz) yapısında kurgulanmıştır.
+
+*   **Step 1 (Boyut & Stil & Kişi Sayısı):**
+    *   Müşteri stili ve boyutu seçer.
+    *   **Öğretici Konsept:** *Çoklu Kişi ve Çift Dövmesi.* Ekrandaki `GuestCounter` bileşeni ile kişi sayısı artırılırsa fiyat dinamik olarak katlanır. Eğer 2 ve üzeri kişi seçilirse "Çift Dövmesi (Couples Tattoo)" opsiyonu açılır ve seçildiğinde sepete %10 indirim uygulanır.
+*   **Step 2 (Fiyat & Tahmin):** Seçilen stilin baz fiyatı, boyutun çarpanı (multiplier) ve kişi sayısı formüle dökülerek tahmini bir fiyat aralığı hesaplanır.
+*   **Step 3 (Bölge & Tarih & Gizlilik):**
+    *   **Öğretici Konsept:** *Private Zone Logic.* Göğüs, kalça gibi özel bölgeler seçildiğinde sistem sadece "Salı ve Perşembe" günlerine ve belirli saatlere randevu verilmesine izin verir.
+*   **Step 4 (Guest Checkout & Shadow Account):**
+    *   **Öğretici Konsept:** *Frictionless UX.* Müşteriler randevu alırken şifre girmeye/kayıt olmaya zorlanmaz. Sadece iletişim bilgileri (Ad, Tel, E-posta) alınır.
+    *   "Devam Et" butonuna basıldığı an, arka planda (`store.ts`) `accountStatus: 'shadow'` (gölge) statüsünde bir hesap otomatik olarak oluşturulur.
+*   **Step 5 (Kapora ve Upsell):**
+    *   Tahmini fiyatın yanı sıra sabit bir kapora tutarı ödenir.
+    *   **Öğretici Konsept:** *Akıllı Upsell.* Kullanıcı büyük boyutlu bir dövme seçmişse, ekranda "3x3 cm minimal tasarımı yarı fiyatına ekle" şeklinde bir Add-on kartı çıkar.
+*   **Step 6 (Tamamlandı & Hesap Aktivasyonu):**
+    *   Referans numarası oluşturulur ve WhatsApp yönlendirme butonu çıkar.
+    *   **Öğretici Konsept:** *Kayıt Dönüşümü.* Sayfanın altında "Sadakat puanı kazanmak için şifre belirle" alanı sunulur. Şifre girilirse gölge hesap `registered` statüsüne terfi ettirilir.
+
+### 2. State Yönetimi ve "Veritabanı" (Zustand Persist)
+Proje şu an "Pure Frontend" olduğu için backend veritabanı kullanılmamıştır. `app/store.ts` içindeki Zustand mağazası tüm sistemi yönetir.
+
+*   **Persist Middleware:** Kullanıcı kayıtları (`allUsers`), hediye kartları (`giftCards`), geçmiş randevular (`appointmentHistory`) ve CRM logları (`notifications`) tarayıcının LocalStorage'ına yazılır. Böylece sayfayı yenileseniz bile müşteri bilgileriniz kaybolmaz.
+*   **Loyalty (Sadakat) Modülü:** Her tamamlanan randevu, kullanıcının `completedAppointments` sayacını artırır.
+    *   0-1 randevu = **Bronze**
+    *   2-3 randevu = **Silver** (Örn: Ücretsiz bakım hediyesi)
+    *   4+ randevu = **Gold** (%15 anında sepet indirimi)
+
+### 3. Dijital Hediye Kartı (`/hediye-karti`)
+Kullanıcıların sevdiklerine bakiye hediye etmesini sağlar.
+*   **Öğretici Konsept:** Yapay zeka ile görsel üretmek yerine CSS ve HTML kullanılarak "holografik" ve 3 boyut hissi veren (`perspective`, `rotate-x/y`) şık bir kredi kartı dizaynı yaratılmıştır. Kodlar Store'a kaydedilir ve alıcı bu kodla indirim talep edebilir.
+
+### 4. Gizli CRM ve Yönetim Paneli (`/admin`)
+Sistemdeki randevuları ve müşteri datalarını yönetmek için tasarlandı.
+*   **Öğretici Konsept:** *Security through Obscurity.* Navbar'da bu link bulunmaz. Sadece `/admin` yazanlar erişebilir.
+*   Giriş için **1453** PIN kodu zorunludur.
+*   Panel üzerinden gölge ve kayıtlı hesaplar (Shadow & Registered) incelenebilir.
+*   **Simüle Edilmiş Backend Görevleri:** Kullanıcıların üzerine tıklayarak "Google Yorumu İste" veya "6 Ay Hatırlatması" gibi CRM tetiklemeleri test amaçlı simüle edilebilir.
+
+---
+
+## 💻 Geliştirme Ortamında Çalıştırma
+
+Proje bilgisayarınıza indirildikten sonra çalıştırmak için terminalde şu komutları kullanabilirsiniz:
 
 ```bash
+# Bağımlılıkları yükleyin (İlk açılışta)
+npm install
+
+# Geliştirici sunucusunu başlatın
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tarayıcınızdan `http://localhost:3000` adresine giderek siteyi görüntüleyebilirsiniz.
+Yönetim paneli için `http://localhost:3000/admin` rotasını kullanabilirsiniz (PIN: 1453).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Bu sistem, modern React/Next.js mimarilerinin gücünü ve state management kullanılarak karmaşık UI akışlarının nasıl zahmetsizce yönetileceğini göstermek amacıyla kodlanmıştır.*
