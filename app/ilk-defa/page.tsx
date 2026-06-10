@@ -10,28 +10,55 @@ import StyleQuiz from '../components/StyleQuiz';
 
 const STYLES = [
   {
-    name: 'Fine-Line',
-    description: 'İnce, zarif çizgilerle yapılan bu tarz, minimal ve sofistike görünüm arayanlar için idealdir. Genellikle çiçek, yaprak ve geometrik formlar kullanılır.',
-    who: 'Zarafeti seven, minimal estetiğe yatkın kişiler.',
-    culture: 'Modern Batı sanatından ilham alır. Özellikle Güney Kore\'daki dövme sanatçıları tarafından popülerleştirilmiştir.',
+    name: 'Fine Line',
+    description: 'İnce, zarif çizgilerle yapılan bu tarz, minimal ve sofistike görünüm arayanlar için idealdir. Küçük semboller ve botanik çizimler için mükemmel.',
+    who: 'Zarif, minimal estetikte huzur bulanlar.',
+    culture: 'Modern Batı sanatından ilham alır. Güney Kore dövme sanatçıları tarafından popülerleştirilmiştir.',
     color: 'from-[#e0c992] to-[#c9a86c]',
   },
   {
-    name: 'Traditional',
+    name: 'American Traditional',
     description: 'Kalın konturlar, canlı renkler ve ikonik motiflerle tanınan klasik Amerikan dövme tarzı. Çapa, gül, kartal gibi sembolik figürler sık kullanılır.',
     who: 'Cesur, kendinden emin ve nostaljik tarza meraklı kişiler.',
     culture: 'Amerikan denizci geleneğinden doğmuştur. Sailor Jerry ve Ed Hardy bu tarzın öncüleridir.',
     color: 'from-[#ef4444] to-[#f97316]',
   },
   {
-    name: 'Dotwork',
-    description: 'Binlerce küçük noktanın bir araya gelmesiyle oluşan bu tarz, hipnotik geometrik desenler ve mandalalar için mükemmeldir.',
-    who: 'Sabırlı, detaycı ve spiritüel derinlik arayan kişiler.',
-    culture: 'Kadim Güneydoğu Asya dövme geleneklerinden esinlenir. Meditasyon ve kutsal geometri ile bağlantılıdır.',
-    color: 'from-[#a855f7] to-[#6366f1]',
+    name: 'Neo Traditional',
+    description: 'Traditional’ın modern yorumu: geniş renk paleti, yumuşak gölgelendirme ve detaylı çizimler. Çiçek, hayvan ve portre motifleri öne çıkar.',
+    who: 'Geleneği modern bir gözle yorumlamayı sevenler.',
+    culture: 'Traditional’dan evrilen bu tarz, 2000’li yıllarda Avrupa ve ABD’de büyük popülerlik kazandı.',
+    color: 'from-[#ec4899] to-[#a855f7]',
+  },
+  {
+    name: 'Black & Grey Realism',
+    description: 'Siyah ve gri tonlarla fotoğraf gerçekliğinde yapılan portre ve doğa tasarımları. İnanılmaz derinlik ve detay sunar.',
+    who: 'Duygusal derinlik ve fotoğrafik detay arayanlar.',
+    culture: 'Chicano kültüründen doğan bu tarz, hapishane dövme geleneğinden rafine bir sanata evrilmiştir.',
+    color: 'from-[#374151] to-[#111827]',
+  },
+  {
+    name: 'Geometric & Ornamental',
+    description: 'Keskin simetri, kutsal geometri desenleri ve ornamental süslemeler. Mandala ve tekrarlayan paternler bu tarzın temelidir.',
+    who: 'Düzen, simetri ve spiritüel derinliğe çekilenler.',
+    culture: 'Hinduizm, Budizm ve Polinezya dövme geleneklerinden ilham alır.',
+    color: 'from-[#6366f1] to-[#8b5cf6]',
+  },
+  {
+    name: 'Watercolor',
+    description: 'Suluboya estetiğiyle özgün, akışkan renk geçişleri. Sınırları olmayan, serbest ve artistik bir tarz.',
+    who: 'Özgür ruhlu ve sanatsal bakma açısına sahip kişiler.',
+    culture: 'Suluboya resim tekniklerinden esinlenen modern bir dövme akımı.',
+    color: 'from-[#06b6d4] to-[#3b82f6]',
+  },
+  {
+    name: 'Trash Polka / Sketch',
+    description: 'Siyah-kırmızı kontrastı, kaotik çizgiler, fırça darbeleri ve kolaj estetiği. Alman kökenli avangart bir tarz.',
+    who: 'Konfor alanının dışında yaşamayı seven, cesur ve asi kişiler.',
+    culture: 'Almanya\'da Simone Pfaff ve Volko Merschky tarafından 1990\'larda yaratılmıştır.',
+    color: 'from-[#dc2626] to-[#1f2937]',
   },
 ];
-
 const BEGINNER_FAQ = [
   { question: 'Çok acır mı?', answer: 'Acı kişiden kişiye ve bölgeden bölgeye değişir. Genel olarak bilek, kol ve baldır gibi bölgeler daha az acıtırken, kaburga, sternum ve ayak bileği gibi kemik üstü bölgeler daha hassastır. Acı seviyesi genellikle tahammül edilebilir düzeydedir.' },
   { question: 'Aç mı gelmeliyim?', answer: 'Hayır, kesinlikle tok karnına gelin! Seansdan 1-2 saat önce doyurucu bir öğün yemenizi öneriyoruz. Kan şekerinizin düşmesi baygınlığa neden olabilir. Yanınıza atıştırmalık ve şekerli içecek de getirebilirsiniz.' },
@@ -181,7 +208,7 @@ export default function IlkDefaPage() {
               <span className="text-[var(--color-foreground)]">Sana Uygun?</span>
             </h2>
             <p className="text-[var(--color-muted)] mt-4 max-w-xl mx-auto">
-              3 basit soruyla sana en uygun dövme tarzını keşfet.
+              5 basit soruyla sana en uygun dövme tarzını keşfet.
             </p>
           </motion.div>
 

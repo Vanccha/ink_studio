@@ -123,9 +123,11 @@ export interface AppointmentRecord {
 
 interface StudioState {
   // Quiz results
-  quizEmotion: string;
+  quizVibe: string;
   quizTexture: string;
-  quizCharacter: string;
+  quizColor: string;
+  quizSubject: string;
+  quizAging: string;
   quizResult: string | null;
 
   // Booking state
@@ -173,7 +175,7 @@ interface StudioState {
   // ==================== ACTIONS ====================
 
   // Quiz
-  setQuizAnswer: (field: 'quizEmotion' | 'quizTexture' | 'quizCharacter', value: string) => void;
+  setQuizAnswer: (field: 'quizVibe' | 'quizTexture' | 'quizColor' | 'quizSubject' | 'quizAging', value: string) => void;
   setQuizResult: (result: string) => void;
 
   // Booking basics
@@ -260,9 +262,11 @@ export const useStudioStore = create<StudioState>()(
   persist(
     (set, get) => ({
       // Quiz state
-      quizEmotion: '',
+      quizVibe: '',
       quizTexture: '',
-      quizCharacter: '',
+      quizColor: '',
+      quizSubject: '',
+      quizAging: '',
       quizResult: null,
 
       // Booking state
