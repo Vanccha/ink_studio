@@ -30,15 +30,15 @@ export default function IlkDefaPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
+      <section className="relative pt-28 pb-16 md:pt-40 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/tattoo-styles.png"
-            alt="Dövme stilleri"
+            src="https://images.unsplash.com/photo-1598371839696-601e3338ea46?w=1600&h=900&fit=crop"
+            alt="Temiz ve profesyonel dövme stüdyosu"
             fill
             className="object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-background)] via-[var(--color-background)]/90 to-[var(--color-background)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-background)] via-[var(--color-background)]/80 to-[var(--color-background)]" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
@@ -46,25 +46,172 @@ export default function IlkDefaPage() {
             {...fadeUp}
             className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-[var(--color-neon-purple)]/30 text-[var(--color-neon-purple)] mb-6"
           >
-            ✦ İlk Dövme Rehberin
+            ✦ Güvenli, Temiz, Profesyonel
           </motion.span>
           <motion.h1
             {...fadeUp}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight"
           >
-            <span className="text-[var(--color-foreground)]">Dövme Dünyasına</span>
+            <span className="text-[var(--color-foreground)]">İlk Dövmen Unutulmaz Bir</span>
             <br />
-            <span className="gradient-text-purple font-serif italic">Hoş Geldin</span>
+            <span className="gradient-text-purple font-serif italic">Deneyim Olmalı</span>
           </motion.h1>
           <motion.p
             {...fadeUp}
             transition={{ delay: 0.2 }}
             className="text-lg text-[var(--color-muted)] max-w-2xl mx-auto"
           >
-            İlk dövmeni yaptırmadan önce bilmen gereken her şey burada.
-            Tarzını keşfet, acı seviyelerini öğren ve kendini hazırla.
+            Heyecanını anlıyoruz. Aklındaki tüm soruları silmek, hijyenik ve sakin bir ortamda sanatla buluşmanı sağlamak için adım adım yanındayız.
           </motion.p>
+        </div>
+      </section>
+
+      {/* ===== TESTIMONIALS (Müşteri Yorumları) ===== */}
+      <section className="py-16 bg-[var(--color-surface)]/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <span className="text-xs uppercase tracking-widest text-[var(--color-neon-pink)] font-semibold">
+              Onlar Da Senin Gibi Hissetmişti
+            </span>
+            <h2 className="text-3xl font-bold mt-3">
+              <span className="text-[var(--color-foreground)]">İlk Defa Yaptıranların</span>{' '}
+              <span className="gradient-text">Deneyimleri</span>
+            </h2>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                name: 'Ayşe Y.',
+                style: 'Fine Line',
+                text: 'İğne korkum yüzünden yıllardır erteliyordum. Stüdyonun sakinliği ve sanatçının her adımı açıklaması beni o kadar rahatlattı ki, acı hissetmedim bile!',
+                rating: 5
+              },
+              {
+                name: 'Can B.',
+                style: 'Minimal',
+                text: 'Hijyen konusunda çok takıntılıyım. Gözümün önünde paketlerin açılması ve otoklav cihazını bana anlatmaları tüm güven problemimi çözdü.',
+                rating: 5
+              },
+              {
+                name: 'Elif D.',
+                style: 'Neo Traditional',
+                text: 'Ne istediğimi tam anlatamıyordum. Benimle oturup 1 saat fikir alışverişi yaptılar, hiç aceleye getirmediler. Sonuç hayal ettiğimden bile güzel oldu.',
+                rating: 5
+              }
+            ].map((testimonial, i) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="glass-card p-6 flex flex-col justify-between hover:border-[var(--color-neon-purple)]/30 transition-colors duration-300"
+              >
+                <div>
+                  <div className="flex gap-1 mb-4 text-[var(--color-accent)] text-sm">
+                    {'★'.repeat(testimonial.rating)}
+                  </div>
+                  <p className="text-[var(--color-muted)] italic text-sm md:text-base mb-6">"{testimonial.text}"</p>
+                </div>
+                <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-4 mt-auto">
+                  <span className="font-bold text-[var(--color-foreground)]">{testimonial.name}</span>
+                  <span className="text-xs px-2 py-1 bg-[var(--color-surface)] rounded-md text-[var(--color-muted)]">{testimonial.style}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== STEP-BY-STEP GUIDE ===== */}
+      <section className="py-16 md:py-24 relative overflow-hidden">
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-96 bg-[var(--color-neon-purple)]/5 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <span className="text-xs uppercase tracking-widest text-[var(--color-accent)] font-semibold">
+              Belirsizliğe Son
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-3">
+              <span className="text-[var(--color-foreground)]">Sürecimiz</span>{' '}
+              <span className="gradient-text-purple">Adım Adım Nasıl İşler?</span>
+            </h2>
+          </motion.div>
+
+          <div className="relative">
+            {/* Connecting Line (Hidden on Mobile) */}
+            <div className="hidden md:block absolute top-[24px] left-0 w-full h-0.5 bg-[var(--color-border)] z-0"></div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 relative z-10">
+              {[
+                { step: '01', title: 'Fikir & Danışmanlık', desc: 'WhatsApp veya form üzerinden hayalinizdeki tasarımı konuşur, uygun sanatçıyı belirleriz.' },
+                { step: '02', title: 'Tasarım & Onay', desc: 'Sanatçımız size özel taslağı hazırlar, revizyonlarla içinize sinene kadar şekillendiririz.' },
+                { step: '03', title: 'Stüdyo Günü', desc: 'Steril ortamda karşılama, transfer kağıdı uygulaması ve konforlu bir dövme seansı.' },
+                { step: '04', title: 'İyileşme Desteği', desc: 'Dövme sonrası bakım kitinizle evinize uğurlar, iyileşme sürecini dijital olarak takip ederiz.' }
+              ].map((item, i) => (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex flex-row md:flex-col items-start md:items-center text-left md:text-center gap-4 group"
+                >
+                  <div className="w-12 h-12 rounded-full bg-[var(--color-background)] border-2 border-[var(--color-border)] group-hover:border-[var(--color-neon-purple)] flex items-center justify-center font-bold text-[var(--color-muted)] group-hover:text-[var(--color-foreground)] group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all duration-300 shrink-0">
+                    {item.step}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">{item.title}</h3>
+                    <p className="text-sm text-[var(--color-muted)]">{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TRUST SIGNALS (Güven ve Hijyen) ===== */}
+      <section className="py-16 md:py-24 bg-[var(--color-surface)]/50 border-y border-[var(--color-border)]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <span className="text-xs uppercase tracking-widest text-[var(--color-neon-pink)] font-semibold">
+              Sağlığınız Önceliğimiz
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-3">
+              <span className="gradient-text">Güven</span>{' '}
+              <span className="text-[var(--color-foreground)]">ve Hijyen Standartlarımız</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <motion.div {...fadeUp} transition={{ delay: 0.1 }} className="flex flex-col items-center text-center p-8 bg-[var(--color-background)] rounded-3xl border border-[var(--color-border)] shadow-sm hover:shadow-lg transition-shadow duration-300">
+              <div className="w-20 h-20 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-4xl mb-6">
+                🔬
+              </div>
+              <h3 className="font-bold text-xl mb-3">Tek Kullanımlık Ekipman</h3>
+              <p className="text-[var(--color-muted)] leading-relaxed">İğneler, mürekkep kapsülleri ve eldivenler gözünüzün önünde açılır ve işlem sonrasında tıbbi atık olarak güvenli şekilde imha edilir.</p>
+            </motion.div>
+            
+            <motion.div {...fadeUp} transition={{ delay: 0.2 }} className="flex flex-col items-center text-center p-8 bg-[var(--color-background)] rounded-3xl border border-[var(--color-border)] shadow-sm hover:shadow-lg transition-shadow duration-300">
+              <div className="w-20 h-20 rounded-2xl bg-green-500/10 text-green-400 flex items-center justify-center text-4xl mb-6">
+                ⚙️
+              </div>
+              <h3 className="font-bold text-xl mb-3">Otoklav Sterilizasyon</h3>
+              <p className="text-[var(--color-muted)] leading-relaxed">Tekrar kullanılabilir metal ekipmanlar, hastane standartlarındaki yüksek basınçlı otoklav cihazlarımızda her kullanım öncesi sterilize edilir.</p>
+            </motion.div>
+            
+            <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="flex flex-col items-center text-center p-8 bg-[var(--color-background)] rounded-3xl border border-[var(--color-border)] shadow-sm hover:shadow-lg transition-shadow duration-300">
+              <div className="w-20 h-20 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-4xl mb-6">
+                📜
+              </div>
+              <h3 className="font-bold text-xl mb-3">Sertifikalı Sanatçılar</h3>
+              <p className="text-[var(--color-muted)] leading-relaxed">Tüm ekibimiz güncel İl Sağlık Müdürlüğü hijyen eğitim sertifikalarına ve Kan Yoluyla Bulaşan Hastalıklar protokol eğitimine sahiptir.</p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
