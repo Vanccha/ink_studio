@@ -57,6 +57,19 @@ Sistemdeki randevuları ve müşteri datalarını yönetmek için tasarlandı.
 *   Panel üzerinden gölge ve kayıtlı hesaplar (Shadow & Registered) incelenebilir.
 *   **Simüle Edilmiş Backend Görevleri:** Kullanıcıların üzerine tıklayarak "Google Yorumu İste" veya "6 Ay Hatırlatması" gibi CRM tetiklemeleri test amaçlı simüle edilebilir.
 
+### 5. Dövme Tarzı Keşif Motoru (25 Soruluk Quiz Algoritması)
+Kullanıcıların kendi estetiklerine en uygun dövme tarzını bulmalarını sağlayan, tamamen frontend üzerinde çalışan dinamik bir "Recommendation Engine" (Öneri Motoru) inşa edilmiştir.
+
+*   **Ağırlıklı Puanlama Sistemi (Weighted Scoring):**
+    *   Algoritma 4 temel kategori (Görsel Algı, Kişilik İfadesi, Yaşam Tarzı, Anatomik Uyumluluk) üzerinden çalışır. Toplam 25 soru vardır.
+    *   Sistemde 12 farklı dövme tarzı tanımlıdır (Fine Line, American Traditional, Watercolor, Micro Realism vb.).
+    *   Kullanıcının seçtiği her şık (`QuizOption`), belirli tarzlara `weight` (ağırlık) puanı (1'den 3'e kadar) atar. Örneğin, minimalizm ile ilgili bir şık seçildiğinde *Fine Line* ve *Minimalist* etiketlerine puan eklenir.
+*   **Dinamik Uyum Hesabı (Confidence Score):**
+    *   Quiz bitiminde tüm ağırlıklar toplanarak en yüksek puana sahip tarz **Birinci Uyumlu Tarz (Primary)** olarak seçilir. En yüksek puan alan ikinci tarz ise **İkincil Eğilim (Secondary)** olarak gösterilir.
+    *   Maksimum ulaşılabilecek puan önceden hesaplanır ve kullanıcının puanına bölünerek % cinsinden bir **Uyum Oranı (Confidence Score)** çıkarılır.
+*   **Kişiselleştirilmiş Sonuçlar:**
+    *   Öneri ekranında sadece tarzın adı değil, kullanıcının "Estetik Profili", bu tarz için "İlk Dövme Notu" ve "Yaşlanma Süreci (Aging Info)" dinamik olarak `STYLE_META` üzerinden render edilir. Ardından tek tıkla doğrudan o tarz için randevu akışına yönlendirme yapılır.
+
 ---
 
 ## 💻 Geliştirme Ortamında Çalıştırma

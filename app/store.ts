@@ -123,12 +123,10 @@ export interface AppointmentRecord {
 
 interface StudioState {
   // Quiz results
-  quizVibe: string;
-  quizTexture: string;
-  quizColor: string;
-  quizSubject: string;
-  quizAging: string;
-  quizResult: string | null;
+  quizAnswers: Record<string, string>; // Maps questionId to optionId
+  quizResultPrimary: string | null;
+  quizResultSecondary: string | null;
+  quizConfidence: number;
 
   // Booking state
   selectedStyle: string;
@@ -175,8 +173,9 @@ interface StudioState {
   // ==================== ACTIONS ====================
 
   // Quiz
-  setQuizAnswer: (field: 'quizVibe' | 'quizTexture' | 'quizColor' | 'quizSubject' | 'quizAging', value: string) => void;
-  setQuizResult: (result: string) => void;
+  setQuizAnswer: (questionId: string, optionId: string) => void;
+  setQuizResults: (primary: string, secondary: string | null, confidence: number) => void;
+  resetQuiz: () => void;
 
   // Booking basics
   setSelectedStyle: (style: string) => void;
@@ -262,12 +261,10 @@ export const useStudioStore = create<StudioState>()(
   persist(
     (set, get) => ({
       // Quiz state
-      quizVibe: '',
-      quizTexture: '',
-      quizColor: '',
-      quizSubject: '',
-      quizAging: '',
-      quizResult: null,
+      quizAnswers: {},
+      quizResultPrimary: null,
+      quizResultSecondary: null,
+      quizConfidence: 0,
 
       // Booking state
       selectedStyle: '',
@@ -313,9 +310,25 @@ export const useStudioStore = create<StudioState>()(
 
       // ==================== ACTION IMPLEMENTATIONS ====================
 
-      setQuizAnswer: (field, value) => set({ [field]: value }),
+      setQuizAnswer: (questionId, optionId) => 
+        set((state) => ({ 
+          quizAnswers: { ...state.quizAnswers, [questionId]: optionId } 
+        })),
 
-      setQuizResult: (result) => set({ quizResult: result, selectedStyle: result }),
+      setQuizResults: (primary, secondary, confidence) => 
+        set({ 
+          quizResultPrimary: primary, 
+          quizResultSecondary: secondary, 
+          quizConfidence: confidence,
+          selectedStyle: primary // Automatically pre-select the primary style for booking
+        }),
+        
+      resetQuiz: () => set({
+        quizAnswers: {},
+        quizResultPrimary: null,
+        quizResultSecondary: null,
+        quizConfidence: 0
+      }),
 
       setSelectedStyle: (style) => {
         set({ selectedStyle: style });

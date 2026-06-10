@@ -8,57 +8,7 @@ import FAQ from '../components/FAQ';
 import PainMap from '../components/PainMap';
 import StyleQuiz from '../components/StyleQuiz';
 
-const STYLES = [
-  {
-    name: 'Fine Line',
-    description: 'İnce, zarif çizgilerle yapılan bu tarz, minimal ve sofistike görünüm arayanlar için idealdir. Küçük semboller ve botanik çizimler için mükemmel.',
-    who: 'Zarif, minimal estetikte huzur bulanlar.',
-    culture: 'Modern Batı sanatından ilham alır. Güney Kore dövme sanatçıları tarafından popülerleştirilmiştir.',
-    color: 'from-[#e0c992] to-[#c9a86c]',
-  },
-  {
-    name: 'American Traditional',
-    description: 'Kalın konturlar, canlı renkler ve ikonik motiflerle tanınan klasik Amerikan dövme tarzı. Çapa, gül, kartal gibi sembolik figürler sık kullanılır.',
-    who: 'Cesur, kendinden emin ve nostaljik tarza meraklı kişiler.',
-    culture: 'Amerikan denizci geleneğinden doğmuştur. Sailor Jerry ve Ed Hardy bu tarzın öncüleridir.',
-    color: 'from-[#ef4444] to-[#f97316]',
-  },
-  {
-    name: 'Neo Traditional',
-    description: 'Traditional’ın modern yorumu: geniş renk paleti, yumuşak gölgelendirme ve detaylı çizimler. Çiçek, hayvan ve portre motifleri öne çıkar.',
-    who: 'Geleneği modern bir gözle yorumlamayı sevenler.',
-    culture: 'Traditional’dan evrilen bu tarz, 2000’li yıllarda Avrupa ve ABD’de büyük popülerlik kazandı.',
-    color: 'from-[#ec4899] to-[#a855f7]',
-  },
-  {
-    name: 'Black & Grey Realism',
-    description: 'Siyah ve gri tonlarla fotoğraf gerçekliğinde yapılan portre ve doğa tasarımları. İnanılmaz derinlik ve detay sunar.',
-    who: 'Duygusal derinlik ve fotoğrafik detay arayanlar.',
-    culture: 'Chicano kültüründen doğan bu tarz, hapishane dövme geleneğinden rafine bir sanata evrilmiştir.',
-    color: 'from-[#374151] to-[#111827]',
-  },
-  {
-    name: 'Geometric & Ornamental',
-    description: 'Keskin simetri, kutsal geometri desenleri ve ornamental süslemeler. Mandala ve tekrarlayan paternler bu tarzın temelidir.',
-    who: 'Düzen, simetri ve spiritüel derinliğe çekilenler.',
-    culture: 'Hinduizm, Budizm ve Polinezya dövme geleneklerinden ilham alır.',
-    color: 'from-[#6366f1] to-[#8b5cf6]',
-  },
-  {
-    name: 'Watercolor',
-    description: 'Suluboya estetiğiyle özgün, akışkan renk geçişleri. Sınırları olmayan, serbest ve artistik bir tarz.',
-    who: 'Özgür ruhlu ve sanatsal bakma açısına sahip kişiler.',
-    culture: 'Suluboya resim tekniklerinden esinlenen modern bir dövme akımı.',
-    color: 'from-[#06b6d4] to-[#3b82f6]',
-  },
-  {
-    name: 'Trash Polka / Sketch',
-    description: 'Siyah-kırmızı kontrastı, kaotik çizgiler, fırça darbeleri ve kolaj estetiği. Alman kökenli avangart bir tarz.',
-    who: 'Konfor alanının dışında yaşamayı seven, cesur ve asi kişiler.',
-    culture: 'Almanya\'da Simone Pfaff ve Volko Merschky tarafından 1990\'larda yaratılmıştır.',
-    color: 'from-[#dc2626] to-[#1f2937]',
-  },
-];
+import { STYLE_META } from '../data/quiz-data';
 const BEGINNER_FAQ = [
   { question: 'Çok acır mı?', answer: 'Acı kişiden kişiye ve bölgeden bölgeye değişir. Genel olarak bilek, kol ve baldır gibi bölgeler daha az acıtırken, kaburga, sternum ve ayak bileği gibi kemik üstü bölgeler daha hassastır. Acı seviyesi genellikle tahammül edilebilir düzeydedir.' },
   { question: 'Aç mı gelmeliyim?', answer: 'Hayır, kesinlikle tok karnına gelin! Seansdan 1-2 saat önce doyurucu bir öğün yemenizi öneriyoruz. Kan şekerinizin düşmesi baygınlığa neden olabilir. Yanınıza atıştırmalık ve şekerli içecek de getirebilirsiniz.' },
@@ -132,33 +82,43 @@ export default function IlkDefaPage() {
           </motion.div>
 
           <div className="space-y-8">
-            {STYLES.map((style, i) => (
+            {Object.entries(STYLE_META).map(([key, style], i) => (
               <motion.div
-                key={style.name}
+                key={key}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: (i % 5) * 0.1 }}
                 className="glass-card p-6 md:p-8 hover:border-[var(--color-accent)]/30 transition-all duration-500 group"
               >
                 <div className="flex flex-col md:flex-row gap-6">
-                  {/* Style Icon */}
-                  <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${style.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-500`}>
-                    <span className="text-3xl md:text-4xl font-bold text-white/90 font-serif">{style.name[0]}</span>
+                  {/* Style Image */}
+                  <div className="relative w-full md:w-48 h-48 rounded-2xl overflow-hidden flex-shrink-0 group-hover:shadow-lg transition-shadow duration-500">
+                    <Image
+                      src={style.exampleImage}
+                      alt={style.displayName}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-width: 768px) 100vw, 200px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                    <div className="absolute bottom-3 left-3 flex items-center justify-center w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-2xl shadow-sm">
+                      {style.emoji}
+                    </div>
                   </div>
 
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-[var(--color-foreground)] mb-3">{style.name}</h3>
+                  <div className="flex-1 flex flex-col justify-center">
+                    <h3 className="text-2xl font-bold text-[var(--color-foreground)] mb-3">{style.displayName}</h3>
                     <p className="text-[var(--color-muted)] leading-relaxed mb-4">{style.description}</p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-[var(--color-surface-light)]/50 rounded-lg p-4">
-                        <span className="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-wider">Kime Uygun?</span>
-                        <p className="text-sm text-[var(--color-foreground)]/80 mt-1">{style.who}</p>
+                        <span className="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-wider">İlk Dövme Notu</span>
+                        <p className="text-sm text-[var(--color-foreground)]/80 mt-1">{style.firstTimerWarning}</p>
                       </div>
                       <div className="bg-[var(--color-surface-light)]/50 rounded-lg p-4">
-                        <span className="text-xs font-semibold text-[var(--color-neon-purple)] uppercase tracking-wider">Kültürel Kökeni</span>
-                        <p className="text-sm text-[var(--color-foreground)]/80 mt-1">{style.culture}</p>
+                        <span className="text-xs font-semibold text-[var(--color-neon-purple)] uppercase tracking-wider">Yaşlanma & Bakım</span>
+                        <p className="text-sm text-[var(--color-foreground)]/80 mt-1">{style.agingInfo}</p>
                       </div>
                     </div>
                   </div>
@@ -208,7 +168,7 @@ export default function IlkDefaPage() {
               <span className="text-[var(--color-foreground)]">Sana Uygun?</span>
             </h2>
             <p className="text-[var(--color-muted)] mt-4 max-w-xl mx-auto">
-              5 basit soruyla sana en uygun dövme tarzını keşfet.
+              25 basit soruyla sana en uygun dövme tarzını keşfet. Görsel örneklere bak ve içgüdülerine güven.
             </p>
           </motion.div>
 
